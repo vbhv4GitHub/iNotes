@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
                     <h5 class="modal-title" id="EditModalLabel">Edit Note</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="/php/iNotes/index.php/" method="POST">
+                <form action="/php/iNotes/index.php" method="POST">
                 <div class="modal-body">
                         <input type = "hidden" name="snoEdit" id="snoEdit">
                         <div class="mb-3">
