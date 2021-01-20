@@ -55,10 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
 </head>
 
 <body>
-    <!-- Edit Trigger Modal -->
+    <!-- Edit Trigger Modal
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">
         Edit
-    </button>
+    </button> -->
 
     <!-- Edit Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
@@ -175,10 +175,17 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
               <th scope='row'>" . $sno . "</th>
               <td>" . $row['title'] . "</td>
               <td>" . $row['description'] . "</td>
-              <td> <a href='/edit' text-decoration='none'>Edit</a> <a href='/delete' text-decoration='none'>Delete</a> </td>
+              <td>
+                <button type='button' class='edit btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#editModal'> 
+                    Edit 
+                </button> 
+                <button type='button' class='delete btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#editModal'>
+                    Delete 
+                </button>
+              </td>
               </tr>";
               echo "<br>";
-              $sno++;
+              $sno = $sno + 1;
             }
           ?>
             </tbody>
@@ -211,15 +218,15 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
     -->
     <script>
     //Creating an event listner for when anyone clicks on edit button, targeting the event by using the class name 'edit'
-    edits = document.getElementByClassName('edit');
-    Array.from(edits).forEach((element) => {
-      element.addEventListner("click", (e))=>{
-        console.log("edit", );
+    edits = document.getElementsByClassName('edit');
+    Array.from(edits).forEach((element)=>{
+      element.addEventListener("click", (e)=>{
+        console.log("edit ", );
         tr = e.target.parentNode.parentNode; 
         title = tr.getElementsByTagName("td")[0].innerText;
         description = tr.getElementsByTagName("td")[1].innerText;
         console.log(title, description);
-      });
+      })
     });
     </script>
 </body>
