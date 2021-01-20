@@ -16,69 +16,69 @@ $conn = mysqli_connect($servername, $username, $password, $database);
 
 //Die if connection was not successful
 if(!$conn){
-  die("Sorry we failed to connect: ". mysqli_connect_error());
-}
-
-if(isset($_GET['delete'])){
-    $sno = $_GET['delete']; //Will return the value of delete from URL that we've programmed using JavaScript.
-
-    // * Deleting previous records.
-
-    $sql = "DELETE FROM `notes` WHERE `sno` = $sno";
-    $result = mysqli_query($conn, $sql);
-    if($result){
-        // echo "The note has been deleted successfully.";
-        $delete = true; // Use this for alert messages.
-    }
-    else{
-        echo "The note couldn't be deleted.";
-        echo mysqli_error($conn);
-        echo "<br>";
-    }
-}
-if ($_SERVER['REQUEST_METHOD'] == $_POST){
-    if (isset($_POST['snoEdit'])){// This condition will update database if serial number is set already or else it'll just add a note.
-        // * Updating previous records.
-        $sno = $_POST['snoEdit'];
-        $title = $_POST['titleEdit'];
-        $description = $_POST['descEdit'];
-        
-        $sql = "UPDATE `notes` SET `title` = '$title', `description` = '$description' WHERE `sno` = $sno";
-        $result = mysqli_query($conn, $sql);
-        if($result){
-            // echo "The note has been updated successfully.";
-            $update = true; // Use this for alert messages.
+            die("Sorry we failed to connect: ". mysqli_connect_error());
         }
-        else{
-            echo "The note couldn't be updated.";
-            echo mysqli_error($conn);
-            echo "<br>";
-        }
-    }
-    else{// If serial number is not set we'll perform addition.
-        // * Adding new records.
-        $title = $_POST['title'];
-        $description = $_POST['desc'];
-        
-        $sql = "INSERT INTO `notes` (`title`, `description`) VALUES ('$title', '$description')";
-        $result = mysqli_query($conn, $sql);
+else{
+            if(isset($_GET['delete'])){
+                $sno = $_GET['delete']; //Will return the value of delete from URL that we've programmed using JavaScript.
 
-        if($result){
-            // echo "The note has been saved successfully.";
-            $alert = true; // Use this for alert messages.
-        }
-        else{
-            echo "The record was not inserted successfully.";
-            echo mysqli_error($conn);
-            echo "<br>";
-        }
+                // * Deleting previous records.
+
+                $sql = "DELETE FROM `notes` WHERE `sno` = $sno";
+                $result = mysqli_query($conn, $sql);
+                if($result){
+                    // echo "The note has been deleted successfully.";
+                    $delete = true; // Use this for alert messages.
+                }
+                else{
+                    echo "The note couldn't be deleted.";
+                    echo mysqli_error($conn);
+                    echo "<br>";
+                }
+            }
+            if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+                if (isset($_POST['snoEdit'])){// This condition will update database if serial number is set   already or else it'll just add a note.
+                    // * Updating previous records.
+                    $sno = $_POST['snoEdit'];
+                    $title = $_POST['titleEdit'];
+                    $description = $_POST['descEdit'];
+                
+                    $sql = "UPDATE `notes` SET `title` = '$title', `description` = '$description' WHERE `sno` = $sno";
+                    $result = mysqli_query($conn, $sql);
+                    if($result){
+                        // echo "The note has been updated successfully.";
+                        $update = true; // Use this for alert messages.
+                    }
+                    else{
+                        echo "The note couldn't be updated.";
+                        echo mysqli_error($conn);
+                        echo "<br>";
+                    }
+                }
+                else{// If serial number is not set we'll perform addition.
+                    // * Adding new records.
+                    $title = $_POST['title'];
+                    $description = $_POST['desc'];
+                
+                    $sql = "INSERT INTO `notes` (`title`, `description`) VALUES ('$title', '$description')";
+                    $result = mysqli_query($conn, $sql);
+
+                    if($result){
+                    // echo "The note has been saved successfully.";
+                    $alert = true; // Use this for alert messages.
+                    }
+                    else{
+                    echo "The record was not inserted successfully.";
+                    echo mysqli_error($conn);
+                    echo "<br>";
+                    }
+                }
+            }        
     }
-}
 ?>
 
 <!doctype html>
 <html lang="en">
-
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -92,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
 
     <title>iNotes - Notes Taking Made Easy</title>
 </head>
-
 <body>
     <!-- Edit Trigger Modal
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">
@@ -317,5 +316,4 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
     });
     </script>
 </body>
-
 </html>
