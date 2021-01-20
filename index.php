@@ -65,11 +65,27 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="EditModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="EditModalLabel">Edit Note</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <form action="/php/Project2/index.php" method="POST">
+                        <input type = "hidden" name="snoEdit" id="snoEdit">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Note Title</label>
+                            <input type="text" class="form-control" id="titleEdit" name="titleEdit" aria-describedby="emailHelp">
+                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="desc">Description</label>
+                            <textarea class="form-control" placeholder="Add description" id="descEdit" name="descEdit" rows="4"></textarea>
+                        </div>
+                        <!-- <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        </div> -->
+                        <button type="submit" class="btn btn-primary">Update Note</button>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -176,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
               <td>" . $row['title'] . "</td>
               <td>" . $row['description'] . "</td>
               <td>
-                <button type='button' class='edit btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#editModal'> 
+                <button type='button'  id=".$row['sno']." class='edit btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#editModal'> 
                     Edit 
                 </button> 
                 <button type='button' class='delete btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#editModal'>
@@ -219,14 +235,19 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
     <script>
     //Creating an event listner for when anyone clicks on edit button, targeting the event by using the class name 'edit'
     edits = document.getElementsByClassName('edit');
-    Array.from(edits).forEach((element)=>{
-      element.addEventListener("click", (e)=>{
-        console.log("edit ", );
-        tr = e.target.parentNode.parentNode; 
-        title = tr.getElementsByTagName("td")[0].innerText;
-        description = tr.getElementsByTagName("td")[1].innerText;
-        console.log(title, description);
-      })
+    Array.from(edits).forEach((element) => {
+        element.addEventListener("click", (e) => {
+            console.log("edit ", );
+            tr = e.target.parentNode.parentNode;
+            title = tr.getElementsByTagName("td")[0].innerText;
+            description = tr.getElementsByTagName("td")[1].innerText;
+            console.log(title, description);
+            titleEdit.value = title;
+            descEdit.value = description; // * This will fill in the respective data in our modal.
+            snoEdit.value = e.target.id; // * This will return us the id of the button.
+            console.log(e.target.id);
+            // * $('#editModal').modal('toggle'); Using this code we can toggle our modal window, ie; open/close.
+        })
     });
     </script>
 </body>
