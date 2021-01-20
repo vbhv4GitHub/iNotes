@@ -107,8 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
                     <h5 class="modal-title" id="EditModalLabel">Edit Note</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form action="/php/iNotes/index.php/" method="POST">
                 <div class="modal-body">
-                    <form action="/php/iNotes/index.php/" method="POST">
                         <input type = "hidden" name="snoEdit" id="snoEdit">
                         <div class="mb-3">
                             <label for="title" class="form-label">Note Title</label>
@@ -119,17 +119,12 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
                             <label for="desc">Description</label>
                             <textarea class="form-control" placeholder="Add description" id="descEdit" name="descEdit" rows="4"></textarea>
                         </div>
-                        <!-- <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                        </div> -->
-                        <button type="submit" class="btn btn-primary">Update Note</button>
-                    </form>
+                        <div class="modal-footer d-block mr-auto">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
