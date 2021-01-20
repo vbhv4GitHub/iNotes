@@ -1,6 +1,8 @@
 <?php
 
 $alert = false;
+$update = false;
+$delete = false;
 
 //Connecting to the database
 $servername = "localhost";
@@ -17,23 +19,60 @@ if(!$conn){
   die("Sorry we failed to connect: ". mysqli_connect_error());
 }
 
+if(isset($_GET['delete'])){
+    $sno = $_GET['delete']; //Will return the value of delete from URL that we've programmed using JavaScript.
 
+    // * Deleting previous records.
+
+    $sql = "DELETE FROM `notes` WHERE `sno` = $sno";
+    $result = mysqli_query($conn, $sql);
+    if($result){
+        // echo "The note has been deleted successfully.";
+        $delete = true; // Use this for alert messages.
+    }
+    else{
+        echo "The note couldn't be deleted.";
+        echo mysqli_error($conn);
+        echo "<br>";
+    }
+}
 if ($_SERVER['REQUEST_METHOD'] == $_POST){
-  $title = $_POST['title'];
-  $description = $_POST['desc'];
-  
-  $sql = "INSERT INTO `notes` (`title`, `description`) VALUES ('$title', '$description')";
-  $result = mysqli_query($conn, $sql);
+    if (isset($_POST['snoEdit'])){// This condition will update database if serial number is set already or else it'll just add a note.
+        // * Updating previous records.
+        $sno = $_POST['snoEdit'];
+        $title = $_POST['titleEdit'];
+        $description = $_POST['descEdit'];
+        
+        $sql = "UPDATE `notes` SET `title` = '$title', `description` = '$description' WHERE `sno` = $sno";
+        $result = mysqli_query($conn, $sql);
+        if($result){
+            // echo "The note has been updated successfully.";
+            $update = true; // Use this for alert messages.
+        }
+        else{
+            echo "The note couldn't be updated.";
+            echo mysqli_error($conn);
+            echo "<br>";
+        }
+    }
+    else{// If serial number is not set we'll perform addition.
+        // * Adding new records.
+        $title = $_POST['title'];
+        $description = $_POST['desc'];
+        
+        $sql = "INSERT INTO `notes` (`title`, `description`) VALUES ('$title', '$description')";
+        $result = mysqli_query($conn, $sql);
 
-  if($result){
-    // echo "The note has been saved successfully.";
-    $alert = true; // Use this for alert messages.
-  }
-  else{
-    echo "The record was not inserted successfully.";
-    echo mysqli_error($conn);
-    echo "<br>";
-  }
+        if($result){
+            // echo "The note has been saved successfully.";
+            $alert = true; // Use this for alert messages.
+        }
+        else{
+            echo "The record was not inserted successfully.";
+            echo mysqli_error($conn);
+            echo "<br>";
+        }
+    }
 }
 ?>
 
@@ -69,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="/php/Project2/index.php" method="POST">
+                    <form action="/php/iNotes/index.php/" method="POST">
                         <input type = "hidden" name="snoEdit" id="snoEdit">
                         <div class="mb-3">
                             <label for="title" class="form-label">Note Title</label>
@@ -140,9 +179,23 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
     <?php
     if($alert){
       echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-      <strong>Success!!</strong> Note have been saved successfully.
+      <strong>Success!!</strong> Note has been saved successfully.
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>'; // * Here goes our alert.
+    }
+
+    if($update){
+      echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Success!!</strong> Note has been updated successfully.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>'; // * Here goes our alert.
+    }
+
+    if($delete){
+        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!!</strong> Note has been deleted successfully.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>'; // * Here goes our alert.
     }
 
     ?>
@@ -150,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
     <div class="container my-4">
         <!-- ! This container will be used to add notes from front end to our database. -->
         <h2> Add a note</h2>
-        <form action="/php/Project2/index.php" method="POST">
+        <form action="/php/iNotes/index.php/" method="POST">
             <div class="mb-3">
                 <label for="title" class="form-label">Note Title</label>
                 <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp">
@@ -195,7 +248,7 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
                 <button type='button'  id=".$row['sno']." class='edit btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#editModal'> 
                     Edit 
                 </button> 
-                <button type='button' class='delete btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#editModal'>
+                <button type='button'  id=d".$row['sno']." class='delete btn btn-sm btn-primary'> 
                     Delete 
                 </button>
               </td>
@@ -247,6 +300,24 @@ if ($_SERVER['REQUEST_METHOD'] == $_POST){
             snoEdit.value = e.target.id; // * This will return us the id of the button.
             console.log(e.target.id);
             // * $('#editModal').modal('toggle'); Using this code we can toggle our modal window, ie; open/close.
+        })
+    });
+
+    deletes = document.getElementsByClassName('delete');
+    Array.from(deletes).forEach((element) => {
+        element.addEventListener("click", (e) => {
+            console.log("delete ", );
+
+            sno = e.target.id.substr(1,); // * Substr(1,) will substract first character from our string.
+            
+            if(confirm("Confirm your deletion?")){
+                console.log("Yes");
+                window.location = `/php/iNotes/index.php?delete=${sno}`;// * Using backticks, template literals in JavaScript.
+                // Use a form to submit sno using Javascript to make it
+            }
+            else{
+                console.log("No.");
+            }
         })
     });
     </script>
